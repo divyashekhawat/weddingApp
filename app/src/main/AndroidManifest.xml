@@ -22,6 +22,10 @@
         <activity android:name=".Contact" />
         <activity android:name=".Invitation" />
         <activity android:name=".Date_Time" />
+        <service
+            android:name=".AlarmService"
+            android:enabled="true" />
+        <receiver android:name=".AlarmReceiver" />
     </application>
 
 </manifest>
