@@ -14,10 +14,12 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.szugyi.circlemenu.view.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
 
 
-    LinearLayout invitationLiner, contactLiner,dateTimeLiner;
+    CircleImageView invitationView, contactView,dateTimeView,locationView,gallaryView;
     Context context;
 
     @Override
@@ -28,11 +30,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context=getApplicationContext();
 
-        invitationLiner=(LinearLayout)findViewById(R.id.invitationLiner);
-        contactLiner=(LinearLayout)findViewById(R.id.contactLiner);
-        dateTimeLiner=(LinearLayout)findViewById(R.id.dateTimeLiner);
+        invitationView=(CircleImageView)findViewById(R.id.invitationLiner);
+        contactView=(CircleImageView) findViewById(R.id.contactView);
+        dateTimeView=(CircleImageView) findViewById(R.id.calenderView);
 
-        invitationLiner.setOnClickListener(new View.OnClickListener() {
+        locationView=(CircleImageView) findViewById(R.id.locationView);
+        gallaryView=(CircleImageView) findViewById(R.id.gallaryView);
+
+        invitationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        contactLiner.setOnClickListener(new View.OnClickListener() {
+        contactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,Contact.class);
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        dateTimeLiner.setOnClickListener(new View.OnClickListener() {
+        dateTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,Date_Time.class);
