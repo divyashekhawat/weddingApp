@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context=getApplicationContext();
 
-        invitationView=(CircleImageView)findViewById(R.id.invitationLiner);
+        invitationView=(CircleImageView)findViewById(R.id.invitationView);
         contactView=(CircleImageView) findViewById(R.id.contactView);
         dateTimeView=(CircleImageView) findViewById(R.id.calenderView);
 
