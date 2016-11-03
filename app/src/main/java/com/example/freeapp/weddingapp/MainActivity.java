@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context=getApplicationContext();
 
-        invitationView=(CircleImageView)findViewById(R.id.invitationLiner);
+        invitationView=(CircleImageView)findViewById(R.id.invitationView);
         contactView=(CircleImageView) findViewById(R.id.contactView);
         dateTimeView=(CircleImageView) findViewById(R.id.calenderView);
 
@@ -64,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,Date_Time.class);
+                startActivity(i);
+
+            }
+        });
+        locationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(context,Location.class);
                 startActivity(i);
 
             }
