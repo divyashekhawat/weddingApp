@@ -32,6 +32,7 @@
         <activity android:name=".Invitation" />
         <activity android:name=".Date_Time" />
         <activity android:name=".Location_"/>
+        <activity android:name=".Gallary"/>
     </application>
 
 </manifest>

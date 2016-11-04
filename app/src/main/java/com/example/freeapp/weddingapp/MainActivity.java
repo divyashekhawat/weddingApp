@@ -52,10 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        dateTimeView.setOnClickListener(new View.OnClickListener() {
+ dateTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,Date_Time.class);
@@ -69,6 +66,13 @@ public class MainActivity extends AppCompatActivity {
                 Intent i=new Intent(context,Location_.class);
                 startActivity(i);
 
+            }
+        });
+        gallaryView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i =new Intent(context, Gallary.class);
+                        startActivity(i);
             }
         });
 

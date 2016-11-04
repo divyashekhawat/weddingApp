@@ -33,7 +33,7 @@
         />
 
     <com.szugyi.circlemenu.view.CircleImageView
-        android:id="@+id/contactView"
+        android:id="@+id/gallaryView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle"
@@ -41,7 +41,7 @@
          />
 
     <com.szugyi.circlemenu.view.CircleImageView
-        android:id="@+id/gallaryView"
+        android:id="@+id/contactView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/circle"
