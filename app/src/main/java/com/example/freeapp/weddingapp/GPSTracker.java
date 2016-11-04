@@ -60,7 +60,7 @@ public class GPSTracker extends Service implements LocationListener {
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
-    // Declaring a Location Manager
+    // Declaring a Location_ Manager
     protected LocationManager locationManager;
 
     // Store LocationManager.GPS_PROVIDER or LocationManager.NETWORK_PROVIDER information
@@ -116,7 +116,7 @@ public class GPSTracker extends Service implements LocationListener {
             // Application can use GPS or Network Provider
             if (!provider_info.isEmpty()) {
 
-                //if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
                     locationManager.requestLocationUpdates(
                             provider_info,
@@ -129,7 +129,7 @@ public class GPSTracker extends Service implements LocationListener {
                         location = locationManager.getLastKnownLocation(provider_info);
                         updateGPSCoordinates();
                     }
-               // }
+                }
             }
         }
         catch (Exception e)
@@ -188,7 +188,9 @@ public class GPSTracker extends Service implements LocationListener {
      */
     public void stopUsingGPS() {
         if (locationManager != null) {
-            locationManager.removeUpdates(GPSTracker.this);
+            if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                locationManager.removeUpdates(GPSTracker.this);
+            }
         }
     }
 
@@ -199,7 +201,7 @@ public class GPSTracker extends Service implements LocationListener {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
         //Setting Dialog Title
-        alertDialog.setTitle("Access Location");
+        alertDialog.setTitle("Access Location_");
 
         //Setting Dialog Message
         alertDialog.setMessage("I want to know your location");

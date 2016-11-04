@@ -3,7 +3,7 @@
     package="com.example.freeapp.weddingapp">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,7 +31,7 @@
         <activity android:name=".Contact" />
         <activity android:name=".Invitation" />
         <activity android:name=".Date_Time" />
-        <activity android:name=".Location"/>
+        <activity android:name=".Location_"/>
     </application>
 
 </manifest>

@@ -1,13 +1,30 @@
 package com.example.freeapp.weddingapp;
 
+import android.Manifest;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Display;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -31,35 +48,162 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Location extends FragmentActivity implements OnMapReadyCallback {
+public class Location_ extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     private GoogleMap mMap;
     ArrayList<LatLng> markerPoints;
-    GPSTracker gpsTracker ;
+    private GoogleApiClient googleApiClient;
+
+    LocationRequest  mLocationRequest;
+    double currentlatitude=0,currentlongitude=0;
+    LocationSettingsRequest.Builder builder;
+    LocationManager locationManager;
+    final int  PERMISSION_ACCESS_COARSE_LOCATION=21;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+
+
         mapFragment.getMapAsync(this);
         markerPoints = new ArrayList<LatLng>();
 
 
-            // check if GPS enabled
-             gpsTracker = new GPSTracker(this);
+        // get lat long
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+                    PERMISSION_ACCESS_COARSE_LOCATION);
+        }
 
-            if (gpsTracker.getIsGPSTrackingEnabled())
-            {
-                 gpsTracker.getLatitude();
-
-            }
-            else
-                gpsTracker.showSettingsAlert();
-
+        //----
+        googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
 
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (googleApiClient != null) {
+            googleApiClient.connect();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if(googleApiClient.isConnected())
+        googleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+
+           currentlatitude = lastLocation.getLatitude(); currentlongitude = lastLocation.getLongitude();
+            setMarker();
+        }
+    }
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+
+
+
+    }
+
+
+
+    public void setMarker(){
+      if(mMap==null)
+          return;;
+
+
+
+        // Add a marker in Sydney, Australia, and move the camera.
+        LatLng latLongVenue = new LatLng(29.072417, 78.348661);
+        LatLng originLatLong = new LatLng(currentlatitude, currentlongitude);
+
+        String url = getDirectionsUrl(originLatLong, latLongVenue);
+
+        DownloadTask downloadTask = new DownloadTask();
+
+        // Start downloading json data from Google Directions API
+        downloadTask.execute(url);
+
+        mMap.addMarker(new MarkerOptions().position(latLongVenue).title("Reception Venue").
+                icon(BitmapDescriptorFactory.fromResource(R.drawable.desitnation_marker)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLongVenue));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLongVenue, 12.0f));
+
+        MarkerOptions mp = new MarkerOptions();
+
+        mp.position(originLatLong);
+
+        mp.title("my position");
+        mp.icon(BitmapDescriptorFactory.fromResource(R.drawable.origin_location));
+        mMap.addMarker(mp);
+
+
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+
+        //for (Marker m : markers) {
+        builder.include(originLatLong);
+        builder.include(latLongVenue);
+        //  }
+        LatLngBounds bounds = builder.build();
+        int padding = ((width * 10) / 100); // offset from edges of the map
+        // in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,
+                padding);
+        mMap.animateCamera(cu);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_ACCESS_COARSE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // All good!
+
+
+                } else {
+                    Toast.makeText(this, "Need your location!", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+    }
+
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 
@@ -123,6 +267,9 @@ public class Location extends FragmentActivity implements OnMapReadyCallback {
         }
         return data;
     }
+
+
+
 
     // Fetches data from url passed
     private class DownloadTask extends AsyncTask<String, Void, String> {
@@ -211,59 +358,15 @@ public class Location extends FragmentActivity implements OnMapReadyCallback {
             }
 
             // Drawing polyline in the Google Map for the i-th route
+            if(lineOptions!=null)
             mMap.addPolyline(lineOptions);
         }
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng latLongVenue = new LatLng(29.072417, 78.348661);
-        LatLng originLatLong = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
-
-        String url = getDirectionsUrl(originLatLong, latLongVenue);
-
-        DownloadTask downloadTask = new DownloadTask();
-
-        // Start downloading json data from Google Directions API
-        downloadTask.execute(url);
-
-        mMap.addMarker(new MarkerOptions().position(latLongVenue).title("Reception Venue").
-                icon(BitmapDescriptorFactory.fromResource(R.drawable.desitnation_marker)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLongVenue));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLongVenue, 12.0f));
-
-        MarkerOptions mp = new MarkerOptions();
-
-        mp.position(originLatLong);
-
-        mp.title("my position");
-       mp.icon(BitmapDescriptorFactory.fromResource(R.drawable.origin_location));
-        mMap.addMarker(mp);
 
 
 
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-
-        //for (Marker m : markers) {
-            builder.include(originLatLong);
-            builder.include(latLongVenue);
-      //  }
-        LatLngBounds bounds = builder.build();
-        int padding = ((width * 10) / 100); // offset from edges of the map
-        // in pixels
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds,
-                padding);
-        mMap.animateCamera(cu);
 
 
-       
 
-    }
 }
