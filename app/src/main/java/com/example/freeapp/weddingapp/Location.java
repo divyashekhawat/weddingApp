@@ -211,6 +211,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback {
             }
 
             // Drawing polyline in the Google Map for the i-th route
+            if(lineOptions!=null)
             mMap.addPolyline(lineOptions);
         }
     }

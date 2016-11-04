@@ -115,9 +115,8 @@ public class GPSTracker extends Service implements LocationListener {
 
             // Application can use GPS or Network Provider
             if (!provider_info.isEmpty()) {
-
-                //if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
                     locationManager.requestLocationUpdates(
                             provider_info,
                             MIN_TIME_BW_UPDATES,
@@ -129,7 +128,9 @@ public class GPSTracker extends Service implements LocationListener {
                         location = locationManager.getLastKnownLocation(provider_info);
                         updateGPSCoordinates();
                     }
-               // }
+               }else {
+
+                }
             }
         }
         catch (Exception e)
@@ -188,7 +189,10 @@ public class GPSTracker extends Service implements LocationListener {
      */
     public void stopUsingGPS() {
         if (locationManager != null) {
-            locationManager.removeUpdates(GPSTracker.this);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                locationManager.removeUpdates(GPSTracker.this);
+            }
         }
     }
 
@@ -205,7 +209,7 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.setMessage("I want to know your location");
 
         //On Pressing Setting button
-        alertDialog.setPositiveButton(R.string.action_settings, new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which)
