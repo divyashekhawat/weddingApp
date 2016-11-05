@@ -3,21 +3,18 @@ package com.example.freeapp.weddingapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
+import com.szugyi.circlemenu.view.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    LinearLayout invitationLiner, contactLiner,dateTimeLiner;
+    CircleImageView invitationView, contactView,dateTimeView,locationView,gallaryView;
     Context context;
 
     @Override
@@ -28,11 +25,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         context=getApplicationContext();
 
-        invitationLiner=(LinearLayout)findViewById(R.id.invitationLiner);
-        contactLiner=(LinearLayout)findViewById(R.id.contactLiner);
-        dateTimeLiner=(LinearLayout)findViewById(R.id.dateTimeLiner);
+        invitationView=(CircleImageView)findViewById(R.id.invitationView);
+        contactView=(CircleImageView) findViewById(R.id.contactView);
+        dateTimeView=(CircleImageView) findViewById(R.id.calenderView);
 
-        invitationLiner.setOnClickListener(new View.OnClickListener() {
+        locationView=(CircleImageView) findViewById(R.id.locationView);
+        gallaryView=(CircleImageView) findViewById(R.id.gallaryView);
+
+        invitationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        contactLiner.setOnClickListener(new View.OnClickListener() {
+        contactView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,Contact.class);
@@ -52,15 +52,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-        dateTimeLiner.setOnClickListener(new View.OnClickListener() {
+ dateTimeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context,Date_Time.class);
                 startActivity(i);
 
+            }
+        });
+        locationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(context,Location_.class);
+                startActivity(i);
+
+            }
+        });
+        gallaryView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i =new Intent(context, Gallary.class);
+                        startActivity(i);
             }
         });
 
@@ -83,9 +95,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
