@@ -14,9 +14,9 @@
     tools:showIn="@layout/activity_main">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:src="@drawable/icon_couple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/couple_2"
         android:id="@+id/imageView" />
 
     <RelativeLayout
@@ -36,20 +36,21 @@
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
         android:gravity="center"
+    android:background="@drawable/circle"
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="40"
-        android:textColor="@color/DeepPink"
-        android:textSize="50sp"/>
+        android:textColor="@color/White"
+        android:textSize="20sp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Days"
 
-        android:textColor="@color/DeepPink"
-        android:textSize="20sp"/>
+        android:textColor="@color/White"
+        android:textSize="15sp"/>
 </LinearLayout>
 </RelativeLayout>
 </LinearLayout>
